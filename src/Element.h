@@ -9,7 +9,6 @@
 #define ELEMENT_H_
 
 #include <cstdint>
-#include "ShipBase.h"
 #include <iostream>
 
 namespace battleship {
@@ -19,23 +18,25 @@ namespace battleship {
 enum class SYMBOL : char { WATER='~', SHIP='#', HIT='!', SANK='X', FIRE='?' };
 #endif
 
+class Ship_Base;
+
 class Element {
 private:
-	const uint32_t coord_x;
-	const uint32_t coord_y;
-	const bool ship_placed;
-	Ship_Base* const shipPtr;
+	uint32_t coord_x;
+	uint32_t coord_y;
+	bool ship_placed;
+	Ship_Base* shipPtr;
 	SYMBOL current_symbol;
-	
+
 	//hidden constructors
-	Element() = delete;
-	Element( const Element& source ) = delete;
-	Element& operator= (const Element& source) = delete;
 	Element& operator= (Element&& source) = delete;
 	Element( Element&& source) = delete;
 
 public:
 	//Constructor
+    Element();
+	Element( const Element& source ) = default;
+	Element& operator= (const Element& source) = default;
 	Element(uint32_t init_x, uint32_t init_y);
 	Element(uint32_t init_x, uint32_t init_y, bool ship_is_placed, Ship_Base* const init_shipPtr);
 
@@ -47,7 +48,7 @@ public:
 
 	//Access functions
 	inline bool is_ship_placed(void) const { return this->ship_placed; };
-	inline Ship_Base* const getShip(void) { return shipPtr; };
+	inline Ship_Base* getShip(void) { return this->shipPtr; };
 	inline void change_symbol (const SYMBOL sym) { this->current_symbol = sym; };
 };
 

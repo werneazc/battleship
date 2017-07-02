@@ -6,18 +6,35 @@
  */
 
 #include "Element.h"
+#include <exception>
 
 namespace battleship {
 
+Element::Element() : Element(0, 0, false, nullptr)
+{
+
+}
+
 Element::Element(uint32_t init_x, uint32_t init_y) : Element(init_x, init_y, false, nullptr)
 {
-	this->current_symbol = SYMBOL::WATER;
+
 }
 
 Element::Element(uint32_t init_x, uint32_t init_y, bool ship_is_placed, Ship_Base* const init_shipPtr) :
-		coord_x(init_x), coord_y(init_y), ship_placed(ship_is_placed), shipPtr(init_shipPtr)
+		coord_x(init_x), coord_y(init_y)
 {
-	this->current_symbol = SYMBOL::SHIP;
+	if (ship_is_placed)
+    {
+        if(!(init_shipPtr == nullptr))
+        {
+            current_symbol = SYMBOL::SHIP;
+            shipPtr = init_shipPtr;
+        }
+        else
+            throw std::invalid_argument("Element cannot be initialized. No valid pointer to ship.");
+    }
+    else
+        current_symbol=SYMBOL::WATER;
 }
 
 std::ostream& operator<<(std::ostream& os, const Element& elem)

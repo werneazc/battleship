@@ -61,4 +61,17 @@ std::ostream& operator<<(std::ostream& os, const Element& elem)
 	return os;
 }
 
+void Element::setShip(Ship_Base* ship)
+{
+    if(ship != nullptr)
+    {
+        shipPtr = ship;
+        change_symbol(SYMBOL::SHIP);
+        ship_placed = true;
+    }
+    else
+        throw std::invalid_argument("Ship Pointer is empty.");
+}
+
+
 } /* namespace battleship */

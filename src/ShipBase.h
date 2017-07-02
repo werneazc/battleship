@@ -9,6 +9,7 @@
 #define SHIPBASE_H_
 
 #include <cstdint>
+#include <tuple>
 
 
 namespace battleship {
@@ -23,13 +24,13 @@ private:
 	SHIPCLASS shipClass;
 	uint8_t shipSize;
 	int8_t hit_counter;
+    unsigned short startX, startY;
+    bool direction;
 
 	//forbidden constructors
 	Ship_Base(Ship_Base&& source) = delete;
 	Ship_Base& operator=(Ship_Base&& source) = delete;
 
-	//helper functions
-	inline bool is_ship_destroyed(void) { return (--hit_counter <= 0) ? true : false; }
 
 public:
 	//Constructor and Destructor
@@ -40,7 +41,19 @@ public:
 	virtual ~Ship_Base() = default;
 
 	//Ship Action
-	inline void fireAtShip(void) { --hit_counter; }
+    inline uint8_t getShipsSize(void) {return shipSize; }
+    inline void setDirection(const bool direc) { direction = direc; }
+    inline void setStartCoordinates(const unsigned short coordX, const unsigned short coordY)
+    {
+        startX = coordX;
+        startY = coordY;
+    }
+    inline std::tuple<unsigned short, unsigned short> getStartCoordinates() const
+    {
+        return std::make_tuple(startX, startY);
+    }
+    inline bool getDirection(void) const {return direction;}
+	inline bool is_ship_destroyed(void) { return (--hit_counter <= 0) ? true : false; }
 
 };
 

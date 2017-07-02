@@ -20,6 +20,14 @@ int main (int argc, char* argv[])
     battleship::Crusher myCrusher_01("Crusher_01");
     battleship::Crusher myCrusher_02("Crusher_02");
 
+    myField.initialize_field_with_ship(&myUboot_01, 0, 0, false);
+    myField.initialize_field_with_ship(&myUboot_02, 4, 5, true);
+    myField.initialize_field_with_ship(&myCrusher_01, 8, 10, false);
+    myField.initialize_field_with_ship(&myCrusher_02, 10, 0, true);
+
+
+    myField.fire(0, 0);
+    myField.fire(10, 0);
 
     std::cout << myField << std::endl;
 

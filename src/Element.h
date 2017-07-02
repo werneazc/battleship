@@ -48,8 +48,15 @@ public:
 
 	//Access functions
 	inline bool is_ship_placed(void) const { return this->ship_placed; };
+    void setShip(Ship_Base* ship);
 	inline Ship_Base* getShip(void) { return this->shipPtr; };
 	inline void change_symbol (const SYMBOL sym) { this->current_symbol = sym; };
+    inline std::tuple<uint32_t, uint32_t> getCoords(void) { return std::make_tuple(coord_x, coord_y); }
+    inline void setCoordinates(std::tuple<uint32_t, uint32_t> coords)
+    {
+        coord_x = std::get<0>(coords);
+        coord_y = std::get<1>(coords);
+    }
 };
 
 } /* namespace battleship */

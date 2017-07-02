@@ -15,7 +15,7 @@ Ship_Base::Ship_Base() : Ship_Base(SHIPCLASS::UBOOT, 1)
 }
 
 Ship_Base::Ship_Base(SHIPCLASS init_class, uint8_t size) :
-    shipClass(init_class), shipSize(size), hit_counter(size)
+    shipClass(init_class), shipSize(size), hit_counter(size), startX(0), startY(0), direction(false)
 {
 
 }

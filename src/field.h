@@ -26,6 +26,11 @@ public:
     Field(unsigned short init_sizeX, unsigned short init_sizeY);
     ~Field() = default;
 
+    bool initialize_field_with_ship(Ship_Base* ships,
+            unsigned short coordX, unsigned short coordY, bool direction);
+
+    bool fire(unsigned short coordX, unsigned short coordY);
+
     friend std::ostream& operator<<(std::ostream& os, const Field& field);
 };
 

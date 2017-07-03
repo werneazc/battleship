@@ -9,7 +9,7 @@ Crusher::Crusher() : Crusher(("Crusher" + std::to_string(crusher_counter)))
 
 }
 
-Crusher::Crusher(std::string init_name) : Ship_Base(SHIPCLASS::CRUSHER, 2), name(init_name)
+Crusher::Crusher(std::string init_name) : Ship_Base(SHIPCLASS::CRUSHER, 3), name(init_name)
 {
     crusher_counter++;
 }

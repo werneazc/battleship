@@ -16,7 +16,7 @@ namespace battleship {
 
 #ifndef SHIPCLASSES
 #define SHIPCLASSES
-enum class SHIPCLASS : uint8_t {UBOOT, CRUSHER};
+enum class SHIPCLASS : uint8_t {DESTROYER, UBOOT, CRUSHER, BATTLESHIP, CARRIER};
 #endif
 
 class Ship_Base {

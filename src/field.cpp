@@ -53,7 +53,7 @@ bool Field::initialize_field_with_ship(Ship_Base* ship, unsigned short coordX, u
 {
     auto shipSize = ship->getShipsSize();
 
-    if(shipSize + coordX >= fieldSizeX || shipSize + coordY >= fieldSizeY)
+    if(shipSize - 1 + coordX >= fieldSizeX || shipSize - 1 + coordY >= fieldSizeY)
         return false;
 
     if (direction)

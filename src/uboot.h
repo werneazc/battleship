@@ -19,7 +19,6 @@ class Uboot : public Ship_Base
 private:
     std::string name;
 
-    static short uboot_counter;
 
     //forbidden Ctors
     Uboot(Uboot&& src) = delete;
@@ -32,6 +31,7 @@ public:
     Uboot(std::string name);
     virtual ~Uboot() = default;
 
+    static short uboot_counter;
 
 };
 

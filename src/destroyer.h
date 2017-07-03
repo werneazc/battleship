@@ -18,7 +18,6 @@ class Destroyer : public Ship_Base
 private:
       std::string name;
 
-      static short destroyer_counter;
 
       //forbidden Ctors
       Destroyer(Destroyer&& src) = delete;
@@ -30,6 +29,7 @@ public:
       Destroyer& operator=(const Destroyer& src) = default;
       Destroyer(std::string name);
       virtual ~Destroyer() = default;
+      static short destroyer_counter;
 
 
 };

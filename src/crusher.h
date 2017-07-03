@@ -19,7 +19,6 @@ class Crusher : public Ship_Base
 private:
     std::string name;
 
-    static short crusher_counter;
 
     //forbidden Ctors
     Crusher(Crusher&& src) = delete;
@@ -31,6 +30,7 @@ public:
     Crusher& operator=(const Crusher& src) = default;
     Crusher(std::string name);
     virtual ~Crusher() = default;
+    static short crusher_counter;
 
 
 };

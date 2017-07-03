@@ -17,7 +17,6 @@ class Battleship : public Ship_Base
 {
 private:
     std::string name;
-    static short battleship_counter;
 
     //forbidden Ctors
     Battleship(Battleship&& src) = delete;
@@ -29,6 +28,7 @@ public:
     Battleship& operator=(const Battleship& src) = default;
     Battleship(std::string name);
     virtual ~Battleship() = default;
+    static short battleship_counter;
 };
 
 } /* namespace battleship */

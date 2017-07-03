@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <tuple>
 
 namespace battleship {
 

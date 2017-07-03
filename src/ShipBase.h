@@ -53,7 +53,7 @@ public:
         return std::make_tuple(startX, startY);
     }
     inline bool getDirection(void) const {return direction;}
-	inline bool is_ship_destroyed(void) { return (--hit_counter <= 0) ? true : false; }
+    inline bool is_ship_destroyed(void) { return (--hit_counter <= 0) ? true : false; }
 
 };
 

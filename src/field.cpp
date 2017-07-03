@@ -1,4 +1,5 @@
-#include "field.h"
+#include "../../battleship_src/src/field.h"
+
 #include <iomanip>
 #include <cstdint>
 #include <tuple>
@@ -72,44 +73,51 @@ bool Field::initialize_field_with_ship(Ship_Base* ship, unsigned short coordX, u
             element_vector[row][coordX].setShip(ship);
     }
 
+    ships_vector.push_back(ship);
+
     return true;
 }
 
-bool Field::fire(unsigned short coordX, unsigned short coordY)
+bool Field::fire(unsigned short coordX, unsigned short coordY,
+		 Field& enemyField, Field& myField)
 {
-    if (coordX >= fieldSizeX || coordY >= fieldSizeY)
+    if (coordX >= enemyField.fieldSizeX || coordY >= enemyField.fieldSizeY)
         return false;
 
-    auto& tempElem = element_vector[coordY][coordX];
+    if(&enemyField == &myField)
+      return false;
 
-    if (tempElem.is_ship_placed())
+    auto& tempElemEnemy = enemyField.element_vector[coordY][coordX];
+    auto& tempElemSelf = myField.element_vector[coordY][coordX];
+
+    if (tempElemEnemy.is_ship_placed())
     {
-        if(tempElem.getShip()->is_ship_destroyed())
+        if(tempElemEnemy.getShip()->is_ship_destroyed())
         {
-            auto startCoords = tempElem.getShip()->getStartCoordinates();
-            if (tempElem.getShip()-> getDirection())
+            auto startCoords = tempElemEnemy.getShip()->getStartCoordinates();
+            if (tempElemEnemy.getShip()-> getDirection())
             {
                 for (auto column = std::get<0>(startCoords);
-                        column < std::get<0>(startCoords) + tempElem.getShip()->getShipsSize();
+                        column < std::get<0>(startCoords) + tempElemEnemy.getShip()->getShipsSize();
                         ++column
                     )
-                    element_vector[std::get<1>(startCoords)][column].change_symbol(SYMBOL::SANK);
+                    myField.element_vector[std::get<1>(startCoords)][column].change_symbol(SYMBOL::SANK);
             }
             else
             {
                 for (auto row = std::get<1>(startCoords);
-                        row < std::get<1>(startCoords) + tempElem.getShip()->getShipsSize();
+                        row < std::get<1>(startCoords) + tempElemEnemy.getShip()->getShipsSize();
                         ++row
                     )
-                    element_vector[row][std::get<0>(startCoords)].change_symbol(SYMBOL::SANK);
+                    myField.element_vector[row][std::get<0>(startCoords)].change_symbol(SYMBOL::SANK);
             }
 
         }
         else
-            tempElem.change_symbol(SYMBOL::HIT);
+            tempElemSelf.change_symbol(SYMBOL::HIT);
     }
     else
-        tempElem.change_symbol(SYMBOL::FIRE);
+        tempElemSelf.change_symbol(SYMBOL::FIRE);
 
 
     return true;

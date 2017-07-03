@@ -5,8 +5,9 @@
  *      Author: andrewerner
  */
 
-#include "ShipBase.h"
 #include <string>
+
+#include "../../battleship_src/src/ShipBase.h"
 #ifndef CRUSHER_H_
 #define CRUSHER_H_
 

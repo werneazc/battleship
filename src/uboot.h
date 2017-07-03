@@ -5,8 +5,9 @@
  *      Author: andrewerner
  */
 
-#include "ShipBase.h"
 #include <string>
+
+#include "../../battleship_src/src/ShipBase.h"
 #ifndef UBOOT_H_
 #define UBOOT_H_
 

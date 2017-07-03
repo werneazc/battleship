@@ -5,10 +5,10 @@
  *      Author: andrewerner
  */
 
-#include "ShipBase.h"
-#include "Element.h"
 #include <vector>
 #include <iostream>
+#include "../../battleship_src/src/Element.h"
+#include "../../battleship_src/src/ShipBase.h"
 
 #ifndef FIELD_H_
 #define FIELD_H_
@@ -29,7 +29,7 @@ public:
     bool initialize_field_with_ship(Ship_Base* ships,
             unsigned short coordX, unsigned short coordY, bool direction);
 
-    bool fire(unsigned short coordX, unsigned short coordY);
+    static bool fire(unsigned short coordX, unsigned short coordY, Field& enemyField, Field& myField);
 
     friend std::ostream& operator<<(std::ostream& os, const Field& field);
 };

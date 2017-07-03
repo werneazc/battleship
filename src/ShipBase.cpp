@@ -5,7 +5,7 @@
  *      Author: andrewerner
  */
 
-#include "ShipBase.h"
+#include "../../battleship_src/src/ShipBase.h"
 
 namespace battleship {
 

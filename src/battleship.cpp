@@ -10,16 +10,18 @@
 namespace battleship
 {
 
+/*
+ * This sets the size of an battleship within the battle field.
+ */
 static constexpr unsigned short BATTLESHIPSIZE = 4;
 
-short Battleship::battleship_counter{0};
+//Initialize static class variable for number of ships
+unsigned short Battleship::battleship_counter{0};
 
 Battleship::Battleship() : Battleship(("Battleship" + std::to_string(battleship_counter)))
-{
+{}
 
-}
-
-Battleship::Battleship(std::string init_name) : Ship_Base(SHIPCLASS::BATTLESHIP, BATTLESHIPSIZE), name(init_name)
+Battleship::Battleship(std::string init_name) : Ship_Base(SHIPCLASS::BATTLESHIP, BATTLESHIPSIZE), shipName(init_name)
 {
   battleship_counter++;
 }

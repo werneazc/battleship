@@ -24,107 +24,111 @@ int main (int argc, char* argv[])
     battleship::Field myField(15, 15);
     battleship::Field enemyField(15, 15);
 
-    //create ships
-    battleship::Destroyer myDestroyer_01("Destroyer_01");
-    battleship::Destroyer myDestroyer_02("Destroyer_02");
-    battleship::Carrier myCarrier_01("Carrier_01");
-    battleship::Uboot myUboot_01("Uboot_01");
-    battleship::Uboot myUboot_02("Uboot_02");
-    battleship::Battleship myBattleShip_01("Battleship_01");
-    battleship::Crusher myCrusher_01("Crusher_01");
+    //create ships and random placement
+    std::vector<battleship::Ship_Base*> shipVec;
 
-    //random place ships
+    shipVec.push_back(new battleship::Destroyer("Destroyer_01"));
+    shipVec.push_back(new battleship::Destroyer("Destroyer_02"));
+    shipVec.push_back(new battleship::Uboot("Uboot_01"));
+    shipVec.push_back(new battleship::Uboot("Uboot_02"));
+    shipVec.push_back(new battleship::Crusher("Crusher_01"));
+    shipVec.push_back(new battleship::Battleship("Battleship_01"));
+    shipVec.push_back(new battleship::Carrier("Carrier_01"));
+
+    // extra scope to delete unused variables after random placement
     {
-      auto seed1{std::chrono::system_clock::now().time_since_epoch().count()};
+		auto seed1{std::chrono::system_clock::now().time_since_epoch().count()};
 
-      std::default_random_engine generator(seed1);
-      std::uniform_int_distribution<unsigned short> distribution(0,14);
-      auto dice{std::bind ( distribution, generator )};
+		std::default_random_engine generator(seed1);
+		std::uniform_int_distribution<unsigned short> distribution(0,14);
+		auto dice{std::bind ( distribution, generator )};
 
-      std::vector<battleship::Ship_Base*> tempVector;
-      tempVector.push_back(&myDestroyer_01);
-      tempVector.push_back(&myDestroyer_02);
-      tempVector.push_back(&myUboot_01);
-      tempVector.push_back(&myUboot_02);
-      tempVector.push_back(&myCrusher_01);
-      tempVector.push_back(&myBattleShip_01);
-      tempVector.push_back(&myCarrier_01);
 
-      unsigned short tempCoordX;
-      unsigned short tempCoordY;
-      unsigned short tempDirection;
+		  unsigned short tempCoordX;
+		  unsigned short tempCoordY;
+		  unsigned short tempDirection;
 
-      for(unsigned short iter = 0; iter < tempVector.size(); ++iter)
-	{
-	   bool ready{false};
-	   do
-	     {
-		 tempCoordX = dice();
-		 tempCoordY = dice();
-		 tempDirection = dice();
+		for(unsigned short iter = 0; iter < shipVec.size(); ++iter)
+		{
+		   bool ready{false};
 
-		 ready = enemyField.initialize_field_with_ship(
-		     tempVector[iter],
-		     tempCoordX, tempCoordY,
-		     (tempDirection >= 10 ? true : false));
+		   do
+			{
+			 tempCoordX = dice();
+			 tempCoordY = dice();
+			 tempDirection = dice();
 
-	     }
-	   while(!ready);
-	}
+			 ready = enemyField.initialize_field_with_ship(
+				 shipVec[iter],
+				 tempCoordX, tempCoordY,
+				 (tempDirection >= 10 ? true : false));
+
+			}
+		   	while(!ready);
+		}
 
     }
+
+
+    //Play game
+    //=========
 
     bool win{false};
     unsigned short tempCoordX;
     unsigned short tempCoordY;
 
-    // play
+    //draw empty Field:
     std::cout << myField << std::endl;
 
+    //Run game until all ships are sunk or user types quit.
     do
     {
-	using std::cout;
-	using std::cin;
-	using std::endl;
+		using std::cout;
+		using std::cin;
+		using std::endl;
 
-	cout << "Please enter coordinates of your draw: " << endl;
-	cout << "If you enter \'q\', you quit!" << endl;
-	cout << "X coordinate: ";
-	cin >> std::dec >> tempCoordX;
-	if (!tempCoordX )
-	  {
-	    win = true;
-	    cout << "You quit game!" << endl;
-	    continue;
-	  }
-	cout << "Y coordinate: ";
-	cin >> std::dec >> tempCoordY;
-	if (!tempCoordY )
-	  {
-	    win = true;
-	    cout << "You quit game!" << endl;
-	    continue;
-	  }
-	cout << endl;
+		cout << "Please enter coordinates of your draw: " << endl;
+		cout << "If you enter \'q\', you quit!" << endl;
+		cout << "X coordinate: ";
+		cin >> std::dec >> tempCoordX;
+		if (!tempCoordX )
+		  {
+			win = true;
+			cout << "###############\n#You quit game!#\n###############" << endl;
+			continue;
+		  }
+		cout << "Y coordinate: ";
+		cin >> std::dec >> tempCoordY;
+		if (!tempCoordY )
+		  {
+			win = true;
+			cout << "You quit game!" << endl;
+			continue;
+		  }
+		cout << endl;
 
-	if(tempCoordX > enemyField.fieldSizeX || tempCoordY > enemyField.fieldSizeY)
-	{
-	  cout << "Coordinates are not within the battle field. Please enter new coordinates." << endl;
-	  continue;
-	}
+		if(tempCoordX > enemyField.fieldSizeX || tempCoordY > enemyField.fieldSizeY)
+		{
+		  cout << "Coordinates are not within the battle field. Please enter new coordinates." << endl;
+		  continue;
+		}
 
-	battleship::Field::fire(--tempCoordX, --tempCoordY, enemyField, myField, win);
+		win = battleship::Field::fire(--tempCoordX, --tempCoordY, enemyField, myField);
 
-	cout << myField << endl;
+		cout << myField << endl;
 
 
     }while(!win);
 
-
+    // Print latest battle field and the reference field before quit.
     std::cout << myField << std::endl;
     std::cout << enemyField << std::endl;
 
     std::cout << "END GAME" << std::endl;
+
+    //Erase all used ships before quit application
+    for (auto ship : shipVec)
+    	delete ship;
 
     return EXIT_SUCCESS;
 }

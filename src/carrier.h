@@ -16,7 +16,7 @@ namespace battleship
 class Carrier : public Ship_Base
 {
 private:
-    std::string name;
+    std::string shipName;
 
 
     //forbidden Ctors
@@ -24,13 +24,31 @@ private:
     Carrier& operator=(Carrier&& src) = delete;
 
 public:
+    //Ctors and Dtor:
     Carrier();
     Carrier(const Carrier& src) = default;
     Carrier& operator=(const Carrier& src) = default;
+
+    /*
+     * Name initializes the name of the ship.
+     */
     Carrier(std::string name);
     virtual ~Carrier() = default;
-    static short carrier_counter;
 
+    /*
+     * This counter counts the number of carriers
+     * within the battlefield.
+     */
+    static unsigned short carrier_counter;
+
+
+   /*
+    * Return the current ship-class as a string.
+    */
+    virtual inline std::string getShipClass(void) const override
+    {
+    	return std::string("Carrier");
+    }
 };
 
 } /* namespace battleship */

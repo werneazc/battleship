@@ -16,7 +16,7 @@ namespace battleship
 class Destroyer : public Ship_Base
 {
 private:
-      std::string name;
+      std::string shipName;
 
 
       //forbidden Ctors
@@ -24,12 +24,30 @@ private:
       Destroyer& operator=(Destroyer&& src) = delete;
 
 public:
+    //Ctors and Dtor:
       Destroyer();
       Destroyer(const Destroyer& src) = default;
       Destroyer& operator=(const Destroyer& src) = default;
+
+    /*
+     * Name initializes the name of the ship.
+     */
       Destroyer(std::string name);
       virtual ~Destroyer() = default;
-      static short destroyer_counter;
+
+    /*
+     * This counter counts the number of destroyers
+     * within the battlefield.
+     */
+      static unsigned short destroyer_counter;
+
+	/*
+	* Return the current ship-class as a string.
+	*/
+	virtual inline std::string getShipClass(void) const override
+	{
+		return std::string("Destroyer");
+	}
 
 
 };

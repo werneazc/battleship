@@ -17,7 +17,7 @@ namespace battleship {
 class Crusher : public Ship_Base
 {
 private:
-    std::string name;
+    std::string shipName;
 
 
     //forbidden Ctors
@@ -25,12 +25,31 @@ private:
     Crusher& operator=(Crusher&& src) = delete;
 
 public:
+    //Ctors and Dtor:
     Crusher();
     Crusher(const Crusher& src) = default;
     Crusher& operator=(const Crusher& src) = default;
+
+    /*
+     * Name initializes the name of the ship.
+     */
     Crusher(std::string name);
     virtual ~Crusher() = default;
-    static short crusher_counter;
+
+    /*
+     * This counter counts the number of Uboots
+     * within the battlefield.
+     */
+    static unsigned short crusher_counter;
+
+   /*
+    * Return the current ship-class as a string.
+    */
+    virtual inline std::string getShipClass(void) const override
+    {
+    	return std::string("Crusher");
+    }
+
 
 
 };

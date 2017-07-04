@@ -30,6 +30,7 @@ Element::Element(uint32_t init_x, uint32_t init_y, bool ship_is_placed, Ship_Bas
         {
             current_symbol = SYMBOL::SHIP;
             shipPtr = init_shipPtr;
+            ship_placed = true;
         }
         else
             throw std::invalid_argument("Element cannot be initialized. No valid pointer to ship.");

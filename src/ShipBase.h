@@ -48,9 +48,9 @@ public:
         startX = coordX;
         startY = coordY;
     }
-    inline std::tuple<unsigned short, unsigned short> getStartCoordinates() const
+    inline std::pair<unsigned short, unsigned short> getStartCoordinates() const
     {
-        return std::make_tuple(startX, startY);
+        return std::make_pair(startX, startY);
     }
     inline bool getDirection(void) const {return direction;}
     inline bool is_ship_destroyed(void) { return (--hit_counter <= 0) ? true : false; }

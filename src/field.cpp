@@ -13,13 +13,13 @@ Field::Field() : Field(0, 0)
 
 
 Field::Field(unsigned short init_sizeX, unsigned short init_sizeY) :
-    fieldSizeX(init_sizeX), fieldSizeY(init_sizeY),
     element_vector(init_sizeY, std::vector<Element>(init_sizeX)),
-    ships_vector(0)
+    ships_vector(0),
+    fieldSizeX(init_sizeX), fieldSizeY(init_sizeY)
 {
     for (uint32_t row = 0; row < fieldSizeY; ++row )
         for(uint32_t column = 0; column < fieldSizeX; ++column)
-            element_vector[row][column].setCoordinates(std::make_tuple(column, row));
+            element_vector[row][column].setCoordinates(std::make_pair(column, row));
 }
 
 std::ostream& operator<<(std::ostream& os, const Field& field)
@@ -29,13 +29,13 @@ std::ostream& operator<<(std::ostream& os, const Field& field)
     os << setw(2);
     os << setfill(' ') << ' ';
     for (unsigned short iter = 0; iter < field.fieldSizeX; ++iter)
-        os << setw(3) << setfill(' ') << right << iter;
+        os << setw(3) << setfill(' ') << right << iter + 1;
     os << endl;
 
     unsigned short lineNumber{0};
     for (auto& line : field.element_vector)
     {
-        os << std::setw(2) << setfill(' ') << lineNumber++;
+        os << std::setw(2) << setfill(' ') << ++lineNumber;
         for (auto& elem : line)
             os <<  setw(3) << setfill(' ') << right << elem;
         os << endl;
@@ -73,16 +73,20 @@ bool Field::initialize_field_with_ship(Ship_Base* ship, unsigned short coordX, u
             element_vector[row][coordX].setShip(ship);
     }
 
+    ship->setStartCoordinates(coordX, coordY);
+    ship->setDirection(direction);
+
     ships_vector.push_back(ship);
 
     return true;
 }
 
 bool Field::fire(unsigned short coordX, unsigned short coordY,
-		 Field& enemyField, Field& myField)
+		 Field& enemyField, Field& myField, bool& win)
 {
+
     if (coordX >= enemyField.fieldSizeX || coordY >= enemyField.fieldSizeY)
-        return false;
+      return false;
 
     if(&enemyField == &myField)
       return false;
@@ -97,24 +101,43 @@ bool Field::fire(unsigned short coordX, unsigned short coordY,
             auto startCoords = tempElemEnemy.getShip()->getStartCoordinates();
             if (tempElemEnemy.getShip()-> getDirection())
             {
-                for (auto column = std::get<0>(startCoords);
-                        column < std::get<0>(startCoords) + tempElemEnemy.getShip()->getShipsSize();
+                for (auto column = startCoords.first;
+                        column < startCoords.first + tempElemEnemy.getShip()->getShipsSize();
                         ++column
                     )
-                    myField.element_vector[std::get<1>(startCoords)][column].change_symbol(SYMBOL::SANK);
+                    myField.element_vector[startCoords.second][column].change_symbol(SYMBOL::SANK);
             }
             else
             {
-                for (auto row = std::get<1>(startCoords);
-                        row < std::get<1>(startCoords) + tempElemEnemy.getShip()->getShipsSize();
+                for (auto row = startCoords.second;
+                        row < startCoords.second + tempElemEnemy.getShip()->getShipsSize();
                         ++row
                     )
-                    myField.element_vector[row][std::get<0>(startCoords)].change_symbol(SYMBOL::SANK);
+                    myField.element_vector[row][startCoords.first].change_symbol(SYMBOL::SANK);
             }
+
+            std::cout << "Ship sank!" << std::endl;
+
+            win = true;
+
+            for (auto ship : enemyField.ships_vector)
+            {
+                if(!ship->is_ship_destroyed())
+                  {
+                    win = false;
+                    break;
+                  }
+            }
+
+            if (win)
+              std::cout << "You Win. Nice job! Congratulations" << std::endl;
 
         }
         else
+          {
             tempElemSelf.change_symbol(SYMBOL::HIT);
+            std::cout << "You hit a ship!" << std::endl;
+          }
     }
     else
         tempElemSelf.change_symbol(SYMBOL::FIRE);
